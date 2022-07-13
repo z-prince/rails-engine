@@ -81,6 +81,6 @@ RSpec.describe 'The items API' do
 
     expect(response).to be_successful
     expect(item.name).to_not eq(previous_name)
-    expect(item.name).to eq("Charlotte's Web")
+    expect(item.name).to eq('Harmonica')
   end
 end
