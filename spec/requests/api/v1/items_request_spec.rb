@@ -45,4 +45,23 @@ RSpec.describe 'The items API' do
     expect(item[:attributes][:description]).to eq(item3.description)
     expect(item[:attributes][:unit_price]).to eq(item3.unit_price)
   end
+
+  it 'creates an item' do
+    item_params = {
+      name: 'Macbook 43',
+      description: "We think you're gonna love this",
+      unit_price: 10_000.0
+    }
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+
+    # We include this header to make sure that these params are passed as JSON rather than as plain text
+    post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
+
+    created_item = Item.last
+
+    expect(response).to be_successful
+    expect(created_item.name).to eq(item_params[:name])
+    expect(created_item.author).to eq(item_params[:description])
+    expect(created_item.summary).to eq(item_params[:unit_price])
+  end
 end
