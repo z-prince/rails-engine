@@ -47,10 +47,13 @@ RSpec.describe 'The items API' do
   end
 
   it 'creates an item' do
+    merch = create(:merchant)
+
     item_params = {
       name: 'Macbook 43',
       description: "We think you're gonna love this",
-      unit_price: 10_000.0
+      unit_price: 10_000.0,
+      merchant_id: merch.id
     }
     headers = { 'CONTENT_TYPE' => 'application/json' }
 
@@ -61,7 +64,8 @@ RSpec.describe 'The items API' do
 
     expect(response).to be_successful
     expect(created_item.name).to eq(item_params[:name])
-    expect(created_item.author).to eq(item_params[:description])
-    expect(created_item.summary).to eq(item_params[:unit_price])
+    expect(created_item.description).to eq(item_params[:description])
+    expect(created_item.unit_price).to eq(item_params[:unit_price])
+    expect(created_item.merchant_id).to eq(item_params[:merchant_id])
   end
 end
