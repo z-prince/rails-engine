@@ -29,8 +29,8 @@ RSpec.describe 'The items API' do
   it 'sends the data of one item' do
     merch1 = create(:merchant)
     merch2 = create(:merchant)
-    item1 = create(:item, merchant_id: merch1.id)
-    item2 = create(:item, merchant_id: merch2.id)
+    create(:item, merchant_id: merch1.id)
+    create(:item, merchant_id: merch2.id)
     item3 = create(:item, merchant_id: merch1.id)
 
     get "/api/v1/items/#{item3.id}"
@@ -50,7 +50,7 @@ RSpec.describe 'The items API' do
     merch = create(:merchant)
 
     item_params = {
-      name: 'Macbook 43',
+      name: 'Macitem 43',
       description: "We think you're gonna love this",
       unit_price: 10_000.0,
       merchant_id: merch.id
@@ -66,5 +66,21 @@ RSpec.describe 'The items API' do
     expect(created_item.description).to eq(item_params[:description])
     expect(created_item.unit_price).to eq(item_params[:unit_price])
     expect(created_item.merchant_id).to eq(item_params[:merchant_id])
+  end
+
+  it 'can update an existing item' do
+    merch1 = create(:merchant)
+    id = create(:item, merchant_id: merch1.id).id
+    previous_name = Item.last.name
+    item_params = { name: 'Harmonica' }
+    headers = { 'CONTENT_TYPE' => 'application/json' }
+
+    # We include this header to make sure that these params are passed as JSON rather than as plain text
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({ item: item_params })
+    item = Item.find_by(id: id)
+
+    expect(response).to be_successful
+    expect(item.name).to_not eq(previous_name)
+    expect(item.name).to eq("Charlotte's Web")
   end
 end
