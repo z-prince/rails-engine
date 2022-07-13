@@ -22,7 +22,7 @@ RSpec.describe 'The items API' do
       expect(item).to have_key(:attributes)
       expect(item[:attributes][:name]).to be_a(String)
       expect(item[:attributes][:description]).to be_a(String)
-      expect(item[:attributes][:unit_price]).to be_a(String)
+      expect(item[:attributes][:unit_price]).to be_a(Float)
     end
   end
 end
