@@ -10,14 +10,11 @@ module Api
       end
 
       def create
-        item = Item.create(item_params)
-        return unless item.save
-
-        render json: ItemSerializer.new(item), status: :created
+        render json: ItemSerializer.new(Item.create(item_params)), status: :created
       end
 
       def update
-        render json: Item.update(params[:id], item_params)
+        render json: ItemSerializer.new(Item.update(params[:id], item_params))
       end
 
       def destroy
