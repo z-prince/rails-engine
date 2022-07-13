@@ -23,11 +23,10 @@ RSpec.describe 'The merchants API' do
   end
 
   it 'sends the data of one merchant' do
-    merchant1 = Merchant.create!(name: 'Sal Salisbury')
-    Merchant.create!(name: 'Rip Ramwinkle')
-    Merchant.create!(name: 'Tom Bologna')
+    merch = create(:merchant)
+    create_list(:merchant, 3)
 
-    get "/api/v1/merchants/#{merchant1.id}"
+    get "/api/v1/merchants/#{merch.id}"
 
     response_body = JSON.parse(response.body, symbolize_names: true)
 
@@ -35,8 +34,21 @@ RSpec.describe 'The merchants API' do
 
     expect(response).to be_successful
 
-    expect(merchant[:attributes][:name]).to_not eq('Rip Ramwinkle')
-    expect(merchant[:attributes][:name]).to_not eq('Tom Bologna')
-    expect(merchant[:attributes][:name]).to eq('Sal Salisbury')
+    expect(merchant[:attributes][:name]).to eq(merch.name)
+  end
+
+  it 'sends all items for a given merchant id' do
+    merchant = create(:merchant)
+    create_list(:item, 10, merchant_id: merchant.id)
+
+    get api_v1_merchant_items_path(merchant_id: merchant.id)
+
+    response_body = JSON.parse(response.body, symbolize_names: true)
+
+    merchant = response_body[:data]
+
+    expect(response).to be_successful
+
+    expect(merchant.count).to eq(10)
   end
 end
