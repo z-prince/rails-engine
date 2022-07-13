@@ -37,7 +37,7 @@ RSpec.describe 'The items API' do
 
     response_body = JSON.parse(response.body, symbolize_names: true)
 
-    merchant = response_body[:data]
+    item = response_body[:data]
 
     expect(response).to be_successful
 
