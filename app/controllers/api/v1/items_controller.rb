@@ -10,7 +10,10 @@ module Api
       end
 
       def create
-        render json: Item.create(item_params)
+        item = Item.create(item_params)
+        return unless item.save
+
+        render json: ItemSerializer.new(item), status: :created
       end
 
       def update
