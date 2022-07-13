@@ -13,6 +13,10 @@ module Api
         render json: Item.create(item_params)
       end
 
+      def update
+        render json: Item.update(params[:id], item_params)
+      end
+
       private
 
       def item_params
