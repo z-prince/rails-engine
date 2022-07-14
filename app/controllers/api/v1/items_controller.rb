@@ -14,7 +14,11 @@ module Api
       end
 
       def update
-        render json: ItemSerializer.new(Item.update(params[:id], item_params))
+        if params[:item][:merchant_id] && Merchant.find_by(id: params[:item][:merchant_id]).nil?
+          render status: 404
+        else
+          render json: ItemSerializer.new(Item.update(params[:id], item_params))
+        end
       end
 
       def destroy
