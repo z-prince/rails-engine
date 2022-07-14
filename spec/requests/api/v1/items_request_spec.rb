@@ -75,7 +75,6 @@ RSpec.describe 'The items API' do
     item_params = { name: 'Harmonica' }
     headers = { 'CONTENT_TYPE' => 'application/json' }
 
-    # We include this header to make sure that these params are passed as JSON rather than as plain text
     patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({ item: item_params })
     item = Item.find_by(id: id)
 
@@ -95,5 +94,19 @@ RSpec.describe 'The items API' do
     expect(response).to be_successful
     expect(Item.count).to eq(0)
     expect { Item.find(item.id) }.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it 'can find an items merchant' do
+    merch1 = create(:merchant)
+    item = create(:item, merchant_id: merch1.id)
+
+    get "/api/v1/items/#{item.id}/merchant"
+
+    response_body = JSON.parse(response.body, symbolize_names: true)
+
+    merchant = response_body[:data]
+
+    expect(response).to be_successful
+    expect(merchant[:attributes][:name]).to eq(item.merchant.name)
   end
 end
