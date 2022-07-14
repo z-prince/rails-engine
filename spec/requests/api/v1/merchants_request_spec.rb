@@ -51,4 +51,19 @@ RSpec.describe 'The merchants API' do
 
     expect(merchant.count).to eq(10)
   end
+
+  it 'can search for one merchant' do
+    merchant = create(:merchant)
+    create_list(:item, 10, merchant_id: merchant.id)
+
+    get api_v1_merchant_items_path(merchant_id: merchant.id)
+
+    response_body = JSON.parse(response.body, symbolize_names: true)
+
+    merchant = response_body[:data]
+
+    expect(response).to be_successful
+
+    expect(merchant.count).to eq(10)
+  end
 end
