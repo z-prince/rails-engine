@@ -111,10 +111,13 @@ RSpec.describe 'The items API' do
   end
 
   it 'can find all items by search criteria' do
-    merch1 = create(:merchant)
-    create_list(:item, 10, merchant_id: merch1.id)
+    merch = create(:merchant)
+    item1 = create(:item, merchant_id: merch.id, name: 'Turing')
+    item2 = create(:item, merchant_id: merch.id, name: 'Ring World')
+    item3 = create(:item, merchant_id: merch.id, name: 'Samsonite')
 
-    get '/api/v1/items/find_all?name=a'
+    get '/api/v1/items/find_all?name=ring'
+
     response_body = JSON.parse(response.body, symbolize_names: true)
 
     items = response_body[:data]
