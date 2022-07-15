@@ -5,6 +5,9 @@ Rails.application.routes.draw do
       namespace :items do
         resources :find_all, only: :index
       end
+      namespace :merchants do
+        resources :find, only: :index
+      end
       resources :items do
         resources :merchant, only: :index, controller: :item_merchant
       end
