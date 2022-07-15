@@ -109,4 +109,19 @@ RSpec.describe 'The items API' do
     expect(response).to be_successful
     expect(merchant[:attributes][:name]).to eq(item.merchant.name)
   end
+
+  it 'can find all items by search criteria' do
+    merch = create(:merchant)
+    item1 = create(:item, merchant_id: merch.id, name: 'Turing')
+    item2 = create(:item, merchant_id: merch.id, name: 'Ring World')
+    item3 = create(:item, merchant_id: merch.id, name: 'Samsonite')
+
+    get '/api/v1/items/find_all?name=ring'
+
+    response_body = JSON.parse(response.body, symbolize_names: true)
+
+    items = response_body[:data]
+
+    expect(response).to be_successful
+  end
 end
